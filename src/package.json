@@ -4,7 +4,8 @@
   "type": "commonjs",
   "scripts": {
     "build:css": "postcss app/static/css/style.css -o app/static/css/app.css",
-    "watch:css": "postcss app/static/css/style.css -o app/static/css/app.css -w"
+    "watch:css": "postcss app/static/css/style.css -o app/static/css/app.css -w",
+    "dev": "concurrently -k -n flask,serial \"python -m flask --app app.scripts.app run --debug\" \"python app/scripts/serial_reader.py\""
   },
   "dependencies": {
     "chart.js": "^4.5.1",
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.0",
+    "concurrently": "^9.2.1",
     "postcss": "^8.5.6",
     "postcss-cli": "^11.0.1",
     "tailwindcss": "^4.2.0"
