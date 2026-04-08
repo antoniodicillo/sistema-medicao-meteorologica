@@ -1,5 +1,6 @@
-import serial, json, requests, time
-PORTA = 'COM3' # Windows: COM3 / Linux: /dev/ttyUSB0
+import serial, json, time
+import requests
+PORTA = 'COM8' # Windows: COM3 / Linux: /dev/ttyUSB0
 BAUD = 9600
 URL = 'http://localhost:5000/leituras'
 
@@ -15,5 +16,7 @@ def ler_serial():
                 except json.JSONDecodeError:
                     print(f'Linha inválida: {linha}')
                     time.sleep(0.1)
-                    if __name__ == '__main__':
-                    ler_serial()
+
+
+if __name__ == '__main__':
+    ler_serial()

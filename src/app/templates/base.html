@@ -7,6 +7,10 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/app.css') }}"
     />
+    <script
+      src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"
+      defer
+    ></script>
     <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
     <title>
       {% block title %} Sistema de Medição Meteorológica{% endblock %}
@@ -16,9 +20,7 @@
     <header class="border-b bg-background backdrop-blur">
       <div class="container py-4 flex items-center justify-between gap-4">
         <a class="flex flex-col no-underline" href="/">
-          <span class="text-lg font-bold tracking-wide">
-            Inteli
-          </span>
+          <span class="text-lg font-bold tracking-wide"> Inteli </span>
           <span class="text-xs tracking-tight">
             Sistema de Medição de Estação Meteorológica
           </span>
@@ -31,7 +33,15 @@
       </div>
     </header>
 
-    <main class="container py-8 margin-auto w-5/6" {% block main_attrs %}{% endblock %}>
+    <main
+      class="container py-8 margin-auto w-5/6"
+      {%
+      block
+      main_attrs
+      %}{%
+      endblock
+      %}
+    >
       {% block content %}{% endblock %}
     </main>
   </body>

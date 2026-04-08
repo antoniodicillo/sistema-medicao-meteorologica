@@ -11,6 +11,126 @@ function fmt(v) {
   return String(v);
 }
 
+function cssVar(name) {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+}
+
+function toNumberOrNull(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+function shortTimestamp(ts) {
+  if (!ts) return "";
+  const s = String(ts);
+  if (s.includes(" ")) {
+    const parts = s.split(" ");
+    return parts[1] || s;
+  }
+  return s;
+}
+
+let chartTemperatura = null;
+let chartUmidade = null;
+
+function chartOptions() {
+  const border = cssVar("--border") || "#27272a";
+  const tick = cssVar("--muted-foreground") || "#a1a1aa";
+
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { mode: "index", intersect: false },
+    },
+    scales: {
+      x: {
+        grid: { color: border },
+        ticks: {
+          color: tick,
+          maxRotation: 0,
+          autoSkip: true,
+          maxTicksLimit: 8,
+        },
+      },
+      y: {
+        grid: { color: border },
+        ticks: { color: tick },
+      },
+    },
+  };
+}
+
+function ensureCharts(readings) {
+  const canvasT = qs("#chartTemperatura");
+  const canvasU = qs("#chartUmidade");
+  if (!canvasT || !canvasU) return;
+  if (typeof Chart === "undefined") return;
+
+  const chronological = readings.slice().reverse();
+  const labels = chronological.map((r) => shortTimestamp(r.timestamp));
+  const temps = chronological.map((r) => toNumberOrNull(r.temperatura));
+  const hums = chronological.map((r) => toNumberOrNull(r.umidade));
+
+  const lineCommon = {
+    borderWidth: 2,
+    pointRadius: 0,
+    tension: 0.35,
+    fill: false,
+  };
+
+  const c1 = cssVar("--chart-1") || cssVar("--primary") || "#fafafa";
+  const c2 = cssVar("--chart-2") || cssVar("--muted-foreground") || "#a1a1aa";
+
+  if (!chartTemperatura) {
+    chartTemperatura = new Chart(canvasT, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          {
+            ...lineCommon,
+            label: "Temperatura",
+            data: temps,
+            borderColor: c1,
+          },
+        ],
+      },
+      options: chartOptions(),
+    });
+  } else {
+    chartTemperatura.data.labels = labels;
+    chartTemperatura.data.datasets[0].data = temps;
+    chartTemperatura.update();
+  }
+
+  if (!chartUmidade) {
+    chartUmidade = new Chart(canvasU, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          {
+            ...lineCommon,
+            label: "Umidade",
+            data: hums,
+            borderColor: c2,
+          },
+        ],
+      },
+      options: chartOptions(),
+    });
+  } else {
+    chartUmidade.data.labels = labels;
+    chartUmidade.data.datasets[0].data = hums;
+    chartUmidade.update();
+  }
+}
+
 async function api(path, options = {}) {
   const res = await fetch(path, {
     headers: { "Content-Type": "application/json" },
@@ -108,6 +228,7 @@ async function loadLatest() {
     const readings = await api("/leituras?limit=12&offset=0");
     renderCards(readings);
     renderLatestTable(readings);
+    ensureCharts(readings);
 
     const now = new Date();
     const hhmmss = now.toLocaleTimeString();

@@ -24,6 +24,40 @@ main_attrs %}data-page="index"{% endblock %} {% block content %}
       aria-live="polite"
     ></div>
 
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      <article class="card">
+        <div class="card__header">
+          <span class="text-sm font-semibold">Temperatura</span>
+          <span class="text-xs text-muted-foreground">°C</span>
+        </div>
+        <div class="card__content">
+          <div class="h-56">
+            <canvas
+              id="chartTemperatura"
+              role="img"
+              aria-label="Gráfico de temperatura"
+            ></canvas>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__header">
+          <span class="text-sm font-semibold">Umidade</span>
+          <span class="text-xs text-muted-foreground">%</span>
+        </div>
+        <div class="card__content">
+          <div class="h-56">
+            <canvas
+              id="chartUmidade"
+              role="img"
+              aria-label="Gráfico de umidade"
+            ></canvas>
+          </div>
+        </div>
+      </article>
+    </div>
+
     <div class="rounded-xl border overflow-auto">
       <table class="table" aria-label="Últimas leituras">
         <thead>

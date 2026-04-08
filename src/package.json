@@ -7,6 +7,7 @@
     "watch:css": "postcss app/static/css/style.css -o app/static/css/app.css -w"
   },
   "dependencies": {
+    "chart.js": "^4.5.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.7.0",
