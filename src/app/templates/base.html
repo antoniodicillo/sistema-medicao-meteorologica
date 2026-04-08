@@ -1,16 +1,39 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
+      href="{{ url_for('static', filename='css/app.css') }}"
     />
     <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
-    <title>Document</title>
+    <title>
+      {% block title %}Sistema de Medição Meteorológica{% endblock %}
+    </title>
   </head>
   <body>
-    base
+    <header class="border-b bg-background/70 backdrop-blur">
+      <div class="container py-4 flex items-center justify-between gap-4">
+        <a class="flex items-center gap-3 no-underline" href="/">
+          <span
+            class="inline-flex h-8 w-8 items-center justify-center rounded-lg border bg-card text-sm font-black"
+            >SM</span
+          >
+          <span class="text-sm font-semibold tracking-tight"
+            >Sistema de Medição Meteorológica</span
+          >
+        </a>
+
+        <nav class="flex items-center gap-2">
+          <a class="btn btn--outline" href="/">Painel</a>
+          <a class="btn btn--outline" href="/historico">Histórico</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container py-8" {% block main_attrs %}{% endblock %}>
+      {% block content %}{% endblock %}
+    </main>
   </body>
 </html>

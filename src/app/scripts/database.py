@@ -1,20 +1,21 @@
-
-import os
-import re
 import sqlite3
 from pathlib import Path
 
+
+APP_DIR = Path(__file__).resolve().parents[1]  # -> .../src/app
+DB_PATH = APP_DIR / "db" / "dados.db"
+SCHEMA_PATH = APP_DIR / "db" / "schema.sql"
+
 def get_db_connection():
-    conn = sqlite3.connect('/app/db/dados.db', timeout=10)
+    conn = sqlite3.connect(str(DB_PATH), timeout=10)
     conn.row_factory = sqlite3.Row
     return conn
 
 def init_db():
     try:
         cur = get_db_connection().cursor()
-        schema_path = Path('src/app/db/schema.sql')
 
-        with open(schema_path) as f:
+        with open(SCHEMA_PATH, encoding="utf-8") as f:
             schema_sql = f.read()
         
         cur.executescript(schema_sql)
@@ -36,10 +37,13 @@ def inserir_leitura(temperatura, umidade, pressao=None):
     except Exception as err:
         return  f"Erro ao inserir leitura no banco de dados: {str(err)}"
 
-def listar_leituras(limite=50):
+def listar_leituras(limite=50, offset=0):
     try:
         cur = get_db_connection().cursor()
-        cur.execute('SELECT * FROM "leituras" ORDER BY id DESC LIMIT ?', (limite,))
+        cur.execute(
+            'SELECT * FROM "leituras" ORDER BY id DESC LIMIT ? OFFSET ?',
+            (limite, offset),
+        )
         leituras = cur.fetchall()
         cur.connection.close()
         return leituras

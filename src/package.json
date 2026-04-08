@@ -1,0 +1,23 @@
+{
+  "name": "sistema-medicao-meteorologica-frontend",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build:css": "postcss app/static/css/style.css -o app/static/css/app.css",
+    "watch:css": "postcss app/static/css/style.css -o app/static/css/app.css -w"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.7.0",
+    "shadcn": "^4.2.0",
+    "tailwind-merge": "^3.5.0",
+    "tw-animate-css": "^1.4.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.0",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "^4.2.0"
+  }
+}
